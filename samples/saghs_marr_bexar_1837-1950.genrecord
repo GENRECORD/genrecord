@@ -1,0 +1,16 @@
+##GENRECORD 1.0
+#version: 1.0
+#type: MARR
+#title: Bexar County Marriage Records 1837-1950
+#society: San Antonio Genealogical and Historical Society
+#society_url: https://txsaghs.org
+#created: 2026-03-29
+#license: CC0
+#coverage.place: Bexar County, Texas, USA
+#coverage.dates: 1837-1950
+#record_count: 3
+---
+record_id,groom_surname,groom_given,bride_surname,bride_given,marr_date,marr_place,officiating_clergy,source,notes
+1,Stricklin,Walter Davis,Jones,Mary Ellen,8 Sep 1909,"San Antonio, Bexar County, Texas",Rev. J.H. Thompson,Bexar County Marriage Book 12 p 204,
+2,Garcia,Jose Antonio,Reyes,Carmen Maria,14 Feb 1910,"San Antonio, Bexar County, Texas",Fr. Miguel Santos,Bexar County Marriage Book 12 p 318,
+3,Mueller,Friedrich Wilhelm,Schmidt,Anna Katharina,25 Dec 1845,"New Braunfels, Comal County, Texas",,Bexar County Marriage Book 1 p 47,Early German settlement period

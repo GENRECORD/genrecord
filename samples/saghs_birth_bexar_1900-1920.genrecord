@@ -1,0 +1,15 @@
+##GENRECORD 1.0
+#version: 1.0
+#type: BIRTH
+#title: Bexar County Birth Records 1900-1920
+#society: San Antonio Genealogical and Historical Society
+#society_url: https://txsaghs.org
+#created: 2026-03-29
+#license: CC0
+#coverage.place: Bexar County, Texas, USA
+#coverage.dates: 1900-1920
+#record_count: 2
+---
+record_id,gender,surname,given,birth_date,birth_place,father_surname,father_given,mother_surname,mother_given,source,notes
+1,M,Stricklin,Charles Walter,15 Jun 1910,San Antonio TX,Stricklin,Walter Davis,Jones,Mary Ellen,Bexar County Birth Register Vol 3 p 42,
+2,F,Garcia,Maria Elena,3 Mar 1912,San Antonio TX,Garcia,Jose,Reyes,Carmen,,
