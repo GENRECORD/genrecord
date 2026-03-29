@@ -1,0 +1,17 @@
+##GENRECORD 1.0
+#version: 1.0
+#type: CEM
+#title: Bexar County Cemetery Transcriptions
+#society: San Antonio Genealogical and Historical Society
+#society_url: https://txsaghs.org
+#created: 2026-03-29
+#license: CC0
+#coverage.place: Bexar County, Texas, USA
+#coverage.dates: 1850-1975
+#contact: education@txsaghs.org
+#notes: Sample file for GENRECORD 1.0 documentation
+---
+record_id,surname,given,gender,birth_date,death_date,cemetery,cemetery_place,section,lot,condition,inscription,notes
+1,Stricklin,Walter Davis,M,20 Apr 1892,14 Mar 1962,City Cemetery,San Antonio TX,A,14,Legible,Walter Davis Stricklin / Born Apr 20 1892 / Died Mar 14 1962 / At Rest,
+2,,,,,1901,City Cemetery,San Antonio TX,,,Illegible,,Stone heavily weathered — no readable text
+3,Moreno,Luis Jimenez,M,1878,1931,San Fernando Cemetery,San Antonio TX,B,22,Partial,,Lower portion of stone broken

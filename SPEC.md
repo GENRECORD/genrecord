@@ -1,34 +1,32 @@
 # GENRECORD Specification
 
-**GENealogical RECORDs**
-An Open Standard for Sharing Genealogical Source Records
+**Version 1.0 — Working Draft — 29 March 2026**
 
-Version 1.0 — Working Draft — 29 March 2026
-
-CC0 1.0 Universal Public Domain Dedication
-No rights reserved. This standard is free for any use by anyone for any purpose.
+CC0 1.0 Universal Public Domain Dedication. No rights reserved.
 
 ---
 
 ## Table of Contents
 
-1. [Preamble](#1-preamble)
-2. [Architecture](#2-architecture)
-3. [Header Block](#3-header-block)
-4. [Date and Place Formats](#4-date-and-place-formats)
-5. [Controlled Vocabularies](#5-controlled-vocabularies)
-6. [Record ID Convention](#6-record-id-convention)
-7. [File Naming Convention](#7-file-naming-convention)
-8. [Custom Fields](#8-custom-fields)
-9. [Record Type Taxonomy](#9-record-type-taxonomy)
-10. [Field Schemas](#10-field-schemas)
-11. [Sample Files](#11-sample-files)
+1. Preamble
+2. Architecture
+3. Header Block
+4. Date and Place Formats
+5. Controlled Vocabularies
+6. Record ID Convention
+7. File Naming Convention
+8. Custom Fields
+9. Record Type Taxonomy
+10. Field Schemas
+11. Sample Files
+12. Versioning Policy
+13. Contributing
 
 ---
 
 ## 1. Preamble
 
-### 1.1 What is GENRECORD?
+### 1.1 What Is GENRECORD?
 
 GENRECORD is an open, plain-text file format for packaging and sharing genealogical source records — cemetery transcriptions, marriage indexes, obituary abstracts, census extracts, courthouse records — between societies, archives, and software. A single file carries both the metadata (what the collection is, where it came from, who created it, what license covers it) and the actual record data.
 
@@ -41,16 +39,14 @@ Genealogical societies create transcribed record sets, but there is no standard 
 - **Not GEDCOM.** GEDCOM is for family trees (individuals, families, relationships). GENRECORD is for source records (transcriptions, indexes, abstracts). They are complementary, not competing.
 - **Not a digitized document format.** GENRECORD carries structured index data — names, dates, locations, fields — not scanned images of original documents.
 - **Not a database.** It is an exchange format. Flat tabular data with a metadata header. No queries, no relationships between records, no nesting.
-- **Not a delivery mechanism.** GENRECORD defines the file format, not how files are transferred, hosted, or discovered. HTTP, FTP, email attachment, USB drive — all out of scope.
+- **Not a delivery mechanism.** GENRECORD defines the file format, not how files are transferred, hosted, or discovered.
 - **Not proprietary.** CC0 Public Domain. No owner, no gatekeeper, no license fees.
 
 ---
 
 ## 2. Architecture
 
-A GENRECORD file is a plain UTF-8 text file with the extension `.genrecord`. It consists of two sections: a header block and a data block, separated by a line containing only three dashes (`---`).
-
-**Structure:**
+A GENRECORD file is a plain UTF-8 text file with the extension `.genrecord`. It consists of two sections separated by a line containing only `---`.
 
 ```
 ##GENRECORD 1.0
@@ -61,7 +57,10 @@ field1,field2,field3
 data,data,data
 ```
 
-The header block contains metadata about the collection as key-value pairs. The data block contains a column definition row followed by data rows in comma-separated values (CSV) format. One file contains exactly one record type.
+- The **header block** contains metadata as key-value pairs, one per line, each beginning with `#`.
+- The **data block** contains a column definition row followed by data rows in CSV format.
+- One file contains exactly one record type.
+- Files must be encoded in UTF-8.
 
 ---
 
@@ -70,20 +69,20 @@ The header block contains metadata about the collection as key-value pairs. The 
 The first line of every GENRECORD file must be `##GENRECORD` followed by the version number. All subsequent header lines begin with `#`. Header keys are lowercase. The header block ends at the `---` separator line.
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `##GENRECORD` | Required | Must be first line. Declares file as GENRECORD format. |
-| `#version` | Required | GENRECORD version number. Current: `1.0` |
+| `#version` | Required | GENRECORD version number. Current: 1.0 |
 | `#type` | Required | Record type code (e.g. CEM, MARR, BIRTH). One type per file. |
 | `#title` | Required | Descriptive title of the collection. |
 | `#society` | Recommended | Name of contributing society or organization. |
 | `#society_url` | Optional | Website of contributing society. |
-| `#created` | Recommended | Date file was created. Format: `YYYY-MM-DD` |
-| `#modified` | Optional | Date file was last modified. Format: `YYYY-MM-DD` |
-| `#license` | Required | License governing use. Recommended: `CC0` |
+| `#created` | Recommended | Date file was created. Format: YYYY-MM-DD |
+| `#modified` | Optional | Date file was last modified. Format: YYYY-MM-DD |
+| `#license` | Required | License governing use. Recommended: CC0 |
 | `#coverage.place` | Recommended | Geographic scope (e.g. Bexar County, Texas, USA) |
 | `#coverage.dates` | Optional | Date range of records (e.g. 1850-1975) |
-| `#language` | Optional | Language of records. Default: `en` |
-| `#encoding` | Optional | Character encoding. Default: `UTF-8` |
+| `#language` | Optional | Language of records. Default: en |
+| `#encoding` | Optional | Character encoding. Default: UTF-8 |
 | `#contact` | Optional | Email or URL for questions about this file. |
 | `#record_count` | Optional | Number of data rows in file. |
 | `#notes` | Optional | Any additional information about the collection. |
@@ -94,39 +93,39 @@ The first line of every GENRECORD file must be `##GENRECORD` followed by the ver
 
 ### 4.1 Date Format
 
-Dates should be recorded as they appear in the original source. GENRECORD does not enforce a single date format in order to preserve the original record as transcribed. However, the following conventions are strongly recommended for new data entry:
+Dates should be recorded as they appear in the original source. GENRECORD does not enforce a single date format in order to preserve the original record as transcribed. The following conventions are strongly recommended for new data entry:
 
-| Format | Example |
-|--------|---------|
-| Full dates | `DD Mon YYYY` (e.g. `20 Apr 1892`) |
-| Year only | `YYYY` (e.g. `1892`) |
-| Approximate dates | prefix with `abt` (e.g. `abt 1892`) |
-| Before/after | prefix with `bef` or `aft` (e.g. `bef 1900`) |
-| Date ranges | use `/` separator (e.g. `1890/1895`) |
-| Unknown | leave field blank |
+| Convention | Format | Example |
+|---|---|---|
+| Full date | DD Mon YYYY | 20 Apr 1892 |
+| Year only | YYYY | 1892 |
+| Approximate | abt YYYY | abt 1892 |
+| Before | bef YYYY | bef 1900 |
+| After | aft YYYY | aft 1865 |
+| Range | YYYY/YYYY | 1890/1895 |
+| Unknown | (blank) | |
 
 ### 4.2 Place Format
 
-Places should be recorded from most specific to least specific, separated by commas. The recommended order is: City or Township, County, State or Province, Country. Examples:
+Places should be recorded from most specific to least specific, separated by commas. Recommended order: City or Township, County, State or Province, Country.
 
+Examples:
 - `San Antonio, Bexar County, Texas, USA`
 - `Wayne County, Tennessee, USA`
 - `County Cork, Ireland`
 
-Record places as they existed at the time of the event, not as they exist today. Use the notes field to record current place names if helpful.
+Record places as they existed at the time of the event. Use the `notes` field to record current place names if helpful.
 
 ---
 
 ## 5. Controlled Vocabularies
-
-Certain fields use controlled vocabularies to ensure consistency and interoperability. Producers should use these values wherever possible.
 
 ### 5.1 Gender
 
 Field: `gender`
 
 | Value | Meaning |
-|-------|---------|
+|---|---|
 | `M` | Male |
 | `F` | Female |
 
@@ -135,7 +134,7 @@ Field: `gender`
 Field: `marital_status`
 
 | Value | Meaning |
-|-------|---------|
+|---|---|
 | `S` | Single |
 | `M` | Married |
 | `W` | Widowed |
@@ -146,7 +145,7 @@ Field: `marital_status`
 Field: `branch` — recommended values (not exhaustive):
 
 | Value | Meaning |
-|-------|---------|
+|---|---|
 | `Army` | United States Army |
 | `Navy` | United States Navy |
 | `Marines` | United States Marine Corps |
@@ -161,7 +160,7 @@ Field: `branch` — recommended values (not exhaustive):
 Field: `condition`
 
 | Value | Meaning |
-|-------|---------|
+|---|---|
 | `Legible` | Stone fully readable |
 | `Partial` | Stone partially readable |
 | `Illegible` | Stone unreadable |
@@ -171,7 +170,7 @@ Field: `condition`
 Field: `ordinance_type`
 
 | Value | Meaning |
-|-------|---------|
+|---|---|
 | `Baptism` | Proxy baptism for the dead |
 | `Endowment` | Proxy endowment |
 | `Sealing` | Proxy sealing |
@@ -182,22 +181,21 @@ Field: `ordinance_type`
 
 Every data row must have a `record_id`. The `record_id` is a simple sequential integer beginning at 1. It is unique within a file but not globally unique. Its purpose is structural: to give every row a stable identifier so that errors can be reported and corrections can reference specific rows.
 
-Example: `1, 2, 3, 4...`
-
-Producers must not reuse `record_id` values within a file. If a row is removed, its `record_id` should not be reassigned.
+- Begin at 1 and increment by 1.
+- Do not reuse `record_id` values within a file.
+- If a row is removed, its `record_id` should not be reassigned.
 
 ---
 
 ## 7. File Naming Convention
 
-GENRECORD files use the extension `.genrecord`. The recommended file naming pattern is:
+GENRECORD files use the extension `.genrecord`. The recommended naming pattern is:
 
 ```
 society_type_scope_daterange.genrecord
 ```
 
 Examples:
-
 - `saghs_cem_bexar_1850-1975.genrecord`
 - `saghs_marr_bexar_1900-1950.genrecord`
 - `wayne-county-tn_census_1880.genrecord`
@@ -208,10 +206,9 @@ File names should be lowercase, use hyphens within components, and underscores b
 
 ## 8. Custom Fields
 
-Producers may add custom fields not defined in the standard schema. All custom fields must be prefixed with `x_` to distinguish them from standard fields.
+Producers may add custom fields not defined in the standard schema. All custom fields must be prefixed with `x_`.
 
 Examples:
-
 - `x_find_a_grave_id` — Find A Grave memorial ID
 - `x_ancestry_pid` — Ancestry.com person ID
 - `x_transcriber` — Name of individual transcriber
@@ -222,10 +219,10 @@ Custom fields may appear anywhere in the column definition row. Consumers that d
 
 ## 9. Record Type Taxonomy
 
-Each GENRECORD file contains exactly one record type, declared in the `#type` header field. The following type codes are defined in GENRECORD 1.0:
+Each GENRECORD file contains exactly one record type, declared in the `#type` header field.
 
 | Code | Type | Category |
-|------|------|----------|
+|---|---|---|
 | `BIRTH` | Birth record | Vital |
 | `DEATH` | Death record | Vital |
 | `BURI` | Burial record | Vital |
@@ -262,24 +259,25 @@ Each GENRECORD file contains exactly one record type, declared in the `#type` he
 | `BIBLE` | Family bible record | Compiled |
 | `FUNERAL` | Funeral home record | Compiled |
 
-Types marked as stubs (`BARMIT`, `INITIAT`) have minimal field definitions and are awaiting community input from practitioners of those faith traditions.
+Types marked as stubs (BARMIT, INITIAT) have minimal field definitions and are awaiting community input.
 
 ---
 
 ## 10. Field Schemas
 
-The following schemas define the fields for each record type. Fields marked **Required** must be present in every record. Fields marked **Recommended** should be included whenever the data is available. Fields marked **Optional** may be omitted freely.
+The `given` field holds all given names as recorded in the source, including middle names. No separate middle name field is defined. This convention applies across all record types.
 
-The field `given` holds all given names as recorded in the source, including middle names. No separate middle name field is defined. This convention applies across all record types.
+Status definitions:
+- **Required** — must be present in every record
+- **Recommended** — include whenever data is available
+- **Optional** — may be omitted freely
 
-Producers may add custom `x_` fields to any record type.
+---
 
-### 10.1 BIRTH — Birth record
-
-Category: Vital
+### BIRTH — Birth record
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `gender` | Required | M or F |
 | `surname` | Recommended | Child's surname |
@@ -297,12 +295,12 @@ Category: Vital
 | `source` | Recommended | Register name, volume, page |
 | `notes` | Optional | |
 
-### 10.2 DEATH — Death record
+---
 
-Category: Vital
+### DEATH — Death record
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -325,12 +323,12 @@ Category: Vital
 | `source` | Recommended | Register name, volume, page |
 | `notes` | Optional | |
 
-### 10.3 BURI — Burial record
+---
 
-Category: Vital
+### BURI — Burial record
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -348,12 +346,12 @@ Category: Vital
 | `source` | Recommended | Register name, volume, page |
 | `notes` | Optional | |
 
-### 10.4 CEM — Cemetery transcription
+---
 
-Category: Vital
+### CEM — Cemetery transcription
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -375,12 +373,12 @@ Category: Vital
 | `source` | Recommended | Transcriber name, date |
 | `notes` | Optional | |
 
-### 10.5 MARR — Marriage record
+---
 
-Category: Vital
+### MARR — Marriage record
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `groom_surname` | Recommended | |
 | `groom_given` | Recommended | All given names as recorded |
@@ -408,12 +406,12 @@ Category: Vital
 | `source` | Recommended | Register name, volume, page |
 | `notes` | Optional | |
 
-### 10.6 DIV — Divorce record
+---
 
-Category: Vital
+### DIV — Divorce record
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `petitioner_surname` | Recommended | |
 | `petitioner_given` | Recommended | All given names as recorded |
@@ -427,12 +425,12 @@ Category: Vital
 | `source` | Recommended | Court record, volume, page |
 | `notes` | Optional | |
 
-### 10.7 CENSUS — Census extract
+---
 
-Category: Legal
+### CENSUS — Census extract
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `census_year` | Required | e.g. 1880 |
 | `surname` | Recommended | |
@@ -456,12 +454,12 @@ Category: Legal
 | `source` | Recommended | Roll, page, enumeration district |
 | `notes` | Optional | |
 
-### 10.8 NAT — Naturalization
+---
 
-Category: Legal
+### NAT — Naturalization
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -481,12 +479,12 @@ Category: Legal
 | `source` | Recommended | Court record, volume, page |
 | `notes` | Optional | |
 
-### 10.9 PROB — Probate / will abstract
+---
 
-Category: Legal
+### PROB — Probate / will abstract
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | Deceased |
 | `given` | Recommended | All given names as recorded |
@@ -503,12 +501,12 @@ Category: Legal
 | `source` | Recommended | Court record, volume, page |
 | `notes` | Optional | |
 
-### 10.10 LAND — Land / deed abstract
+---
 
-Category: Legal
+### LAND — Land / deed abstract
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `grantor_surname` | Recommended | Seller or granter |
 | `grantor_given` | Recommended | All given names as recorded |
@@ -525,12 +523,12 @@ Category: Legal
 | `source` | Recommended | Deed book, volume, page |
 | `notes` | Optional | |
 
-### 10.11 COURT — Court record
+---
 
-Category: Legal
+### COURT — Court record
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `plaintiff_surname` | Recommended | |
 | `plaintiff_given` | Recommended | All given names as recorded |
@@ -546,12 +544,12 @@ Category: Legal
 | `source` | Recommended | Court record, volume, page |
 | `notes` | Optional | |
 
-### 10.12 PRISON — Prison / penitentiary
+---
 
-Category: Legal
+### PRISON — Prison / penitentiary
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -569,12 +567,12 @@ Category: Legal
 | `source` | Recommended | Register name, volume, page |
 | `notes` | Optional | |
 
-### 10.13 TAX — Tax record
+---
 
-Category: Legal
+### TAX — Tax record
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -589,12 +587,12 @@ Category: Legal
 | `source` | Recommended | Tax list, volume, page |
 | `notes` | Optional | |
 
-### 10.14 VOTE — Voter registration / poll book
+---
 
-Category: Legal
+### VOTE — Voter registration / poll book
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -611,12 +609,12 @@ Category: Legal
 | `source` | Recommended | Poll book, register, volume, page |
 | `notes` | Optional | |
 
-### 10.15 IMMIG — Immigration / arrival record
+---
 
-Category: Legal
+### IMMIG — Immigration / arrival record
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -636,12 +634,12 @@ Category: Legal
 | `source` | Recommended | Manifest, roll, page |
 | `notes` | Optional | |
 
-### 10.16 EMIG — Emigration / departure record
+---
 
-Category: Legal
+### EMIG — Emigration / departure record
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -656,12 +654,12 @@ Category: Legal
 | `source` | Recommended | Emigration register, volume, page |
 | `notes` | Optional | |
 
-### 10.17 MIL — Military record
+---
 
-Category: Military
+### MIL — Military record
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -684,12 +682,12 @@ Category: Military
 | `source` | Recommended | Record type, roll, page |
 | `notes` | Optional | |
 
-### 10.18 BAPT — Baptism / Christening
+---
 
-Category: Religious
+### BAPT — Baptism / Christening
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -711,12 +709,12 @@ Category: Religious
 | `source` | Recommended | Register name, volume, page |
 | `notes` | Optional | |
 
-### 10.19 CONF — Confirmation
+---
 
-Category: Religious
+### CONF — Confirmation
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -735,12 +733,12 @@ Category: Religious
 | `source` | Recommended | Register name, volume, page |
 | `notes` | Optional | |
 
-### 10.20 CONGR — Congregation membership
+---
 
-Category: Religious
+### CONGR — Congregation membership
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -755,12 +753,12 @@ Category: Religious
 | `source` | Recommended | Register name, volume, page |
 | `notes` | Optional | |
 
-### 10.21 CLERGY — Clergy / ordination
+---
 
-Category: Religious
+### CLERGY — Clergy / ordination
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -775,12 +773,12 @@ Category: Religious
 | `source` | Recommended | Register name, volume, page |
 | `notes` | Optional | |
 
-### 10.22 PROXY — LDS proxy ordinance
+---
 
-Category: Religious
+### PROXY — LDS proxy ordinance
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | Deceased person |
 | `given` | Recommended | All given names as recorded |
@@ -795,12 +793,12 @@ Category: Religious
 | `source` | Recommended | FamilySearch or temple record |
 | `notes` | Optional | |
 
-### 10.23 EXCOM — Excommunication
+---
 
-Category: Religious
+### EXCOM — Excommunication
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -814,12 +812,12 @@ Category: Religious
 | `source` | Recommended | Register name, volume, page |
 | `notes` | Optional | |
 
-### 10.24 BARMIT — Bar/Bat Mitzvah
+---
 
-Category: Religious
+### BARMIT — Bar/Bat Mitzvah *(stub)*
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -835,12 +833,12 @@ Category: Religious
 | `source` | Recommended | Register name, volume, page |
 | `notes` | Optional | Stub — awaiting community input |
 
-### 10.25 INITIAT — Religious initiation
+---
 
-Category: Religious
+### INITIAT — Religious initiation *(stub)*
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -853,12 +851,12 @@ Category: Religious
 | `source` | Recommended | Register name, volume, page |
 | `notes` | Optional | Stub — awaiting community input |
 
-### 10.26 SCHOOL — School enrollment
+---
 
-Category: Education
+### SCHOOL — School enrollment
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -878,12 +876,12 @@ Category: Education
 | `source` | Recommended | Register name, volume, page |
 | `notes` | Optional | |
 
-### 10.27 DEGREE — College / university degree
+---
 
-Category: Education
+### DEGREE — College / university degree
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -898,12 +896,12 @@ Category: Education
 | `source` | Recommended | Commencement record, register |
 | `notes` | Optional | |
 
-### 10.28 CERT — Vocational / professional certification
+---
 
-Category: Education
+### CERT — Vocational / professional certification
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -917,12 +915,12 @@ Category: Education
 | `source` | Recommended | Register name, volume, page |
 | `notes` | Optional | |
 
-### 10.29 TEACH — Teacher record
+---
 
-Category: Education
+### TEACH — Teacher record
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -938,12 +936,12 @@ Category: Education
 | `source` | Recommended | Register name, volume, page |
 | `notes` | Optional | |
 
-### 10.30 OBIT — Obituary
+---
 
-Category: Newspaper
+### OBIT — Obituary
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -962,12 +960,12 @@ Category: Newspaper
 | `source` | Recommended | Newspaper name, date, page |
 | `notes` | Optional | |
 
-### 10.31 MARANN — Marriage announcement
+---
 
-Category: Newspaper
+### MARANN — Marriage announcement
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `groom_surname` | Recommended | |
 | `groom_given` | Recommended | All given names as recorded |
@@ -982,12 +980,12 @@ Category: Newspaper
 | `source` | Recommended | Newspaper name, date, page |
 | `notes` | Optional | |
 
-### 10.32 BIRTHANN — Birth announcement
+---
 
-Category: Newspaper
+### BIRTHANN — Birth announcement
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `child_surname` | Recommended | |
 | `child_given` | Optional | If named in announcement |
@@ -1004,12 +1002,12 @@ Category: Newspaper
 | `source` | Recommended | Newspaper name, date, page |
 | `notes` | Optional | |
 
-### 10.33 BIO — Biography abstract
+---
 
-Category: Compiled
+### BIO — Biography abstract
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -1027,12 +1025,12 @@ Category: Compiled
 | `source` | Recommended | Full citation |
 | `notes` | Optional | |
 
-### 10.34 BIBLE — Family bible record
+---
 
-Category: Compiled
+### BIBLE — Family bible record
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -1047,12 +1045,12 @@ Category: Compiled
 | `source` | Recommended | Bible description, repository |
 | `notes` | Optional | |
 
-### 10.35 FUNERAL — Funeral home record
+---
 
-Category: Compiled
+### FUNERAL — Funeral home record
 
 | Field | Status | Notes |
-|-------|--------|-------|
+|---|---|---|
 | `record_id` | Required | Universal unique identifier |
 | `surname` | Recommended | |
 | `given` | Recommended | All given names as recorded |
@@ -1075,71 +1073,30 @@ Category: Compiled
 
 ## 11. Sample Files
 
-### 11.1 Cemetery Transcription (CEM)
+Sample files are available in the `examples/` directory of this repository:
 
-```
-##GENRECORD 1.0
-#version: 1.0
-#type: CEM
-#title: Bexar County Cemetery Transcriptions
-#society: San Antonio Genealogical and Historical Society
-#society_url: https://txsaghs.org
-#created: 2026-03-29
-#license: CC0
-#coverage.place: Bexar County, Texas, USA
-#coverage.dates: 1850-1975
-#contact: education@txsaghs.org
----
-record_id,surname,given,gender,birth_date,death_date,cemetery,cemetery_place,section,lot,condition,notes
-1,Stricklin,Walter Davis,M,20 Apr 1892,14 Mar 1962,City Cemetery,San Antonio TX,A,14,Legible,
-2,,,,,1901,City Cemetery,San Antonio TX,,,Illegible,Stone heavily weathered
-3,Moreno,Luis Jimenez,M,1878,1931,San Fernando Cemetery,San Antonio TX,B,22,Partial,
-```
-
-### 11.2 Birth Record (BIRTH)
-
-```
-##GENRECORD 1.0
-#version: 1.0
-#type: BIRTH
-#title: Bexar County Birth Records 1900-1920
-#society: San Antonio Genealogical and Historical Society
-#society_url: https://txsaghs.org
-#created: 2026-03-29
-#license: CC0
-#coverage.place: Bexar County, Texas, USA
-#coverage.dates: 1900-1920
----
-record_id,gender,surname,given,birth_date,birth_place,father_surname,father_given,mother_surname,mother_given,source,notes
-1,M,Stricklin,Charles Walter,15 Jun 1910,San Antonio TX,Stricklin,Walter Davis,Jones,Mary Ellen,Bexar County Birth Register Vol 3 p 42,
-2,F,Garcia,Maria Elena,3 Mar 1912,San Antonio TX,Garcia,Jose,Reyes,Carmen,,
-```
+- `sample_CEM.genrecord` — Cemetery transcription
+- `sample_BIRTH.genrecord` — Birth record
+- `sample_MARR.genrecord` — Marriage record
 
 ---
 
-## Appendix A: Versioning Policy
+## 12. Versioning Policy
 
-GENRECORD follows a simple versioning policy designed to protect producers and consumers from breaking changes.
-
-- **Minor versions** (1.0, 1.1, 1.2) add optional fields or new record types. A consumer built for 1.0 can read a 1.2 file without modification.
+- **Minor versions** (1.0, 1.1, 1.2) add optional fields or new record types only. A consumer built for 1.0 can read a 1.2 file without modification.
 - **Major versions** (1.0, 2.0) may introduce breaking changes and are expected to be rare.
-- Fields are never removed in minor versions. Deprecated fields are marked in the spec and ignored by producers, but remain valid for consumers.
+- Fields are never removed in minor versions. Deprecated fields are marked in the spec and ignored by producers but remain valid for consumers.
 - The version number is declared in both the `##GENRECORD` line and the `#version` header field.
 
 ---
 
-## Appendix B: Contributing
+## 13. Contributing
 
-GENRECORD is a community standard. Corrections, additions, and new record type definitions are welcome. The canonical repository is hosted at [github.com/GENRECORD/genrecord](https://github.com/GENRECORD/genrecord).
+GENRECORD grows through community input. To contribute:
 
-To propose changes: open an issue or pull request on GitHub. To report errors in this document: contact the maintainer via the repository.
+- Open an issue to report errors, propose new fields, or suggest new record types
+- Submit a pull request to contribute a parser, validator, or sample file
+- Faith tradition experts — BARMIT and INITIAT are stubs awaiting input from practitioners
+- Archivists and librarians — tell us where GENRECORD fits with EAD, Dublin Core, and OAI-PMH
 
-Faith traditions with institutional genealogical records who wish to contribute field schemas for BARMIT, INITIAT, or new record types are especially encouraged to participate.
-
----
-
-## Appendix C: License
-
-This specification is released under the **CC0 1.0 Universal Public Domain Dedication**. To the extent possible under law, the authors have waived all copyright and related rights to this work. You may copy, modify, distribute, and use this specification for any purpose, commercial or non-commercial, without asking permission.
-
-Full license text: [https://creativecommons.org/publicdomain/zero/1.0/](https://creativecommons.org/publicdomain/zero/1.0/)
+**Project home:** [genrecord.org](https://genrecord.org)

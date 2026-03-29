@@ -1,0 +1,15 @@
+##GENRECORD 1.0
+#version: 1.0
+#type: MARR
+#title: Bexar County Marriage Records 1880-1920
+#society: San Antonio Genealogical and Historical Society
+#society_url: https://txsaghs.org
+#created: 2026-03-29
+#license: CC0
+#coverage.place: Bexar County, Texas, USA
+#coverage.dates: 1880-1920
+#notes: Sample file for GENRECORD 1.0 documentation
+---
+record_id,groom_surname,groom_given,bride_surname,bride_given,marr_date,marr_place,officiating_clergy,witness1_surname,witness1_given,source,notes
+1,Stricklin,Walter Davis,Jones,Mary Ellen,14 Feb 1911,"San Antonio, Bexar County, Texas",Rev. John H. Adams,Smith,Thomas B.,Bexar County Marriage Register Vol 7 p 18,
+2,Rodriguez,Carlos Manuel,Flores,Ana Maria,3 Jun 1905,"San Antonio, Bexar County, Texas",,,,Bexar County Marriage Register Vol 5 p 44,

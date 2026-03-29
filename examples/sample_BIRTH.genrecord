@@ -8,8 +8,9 @@
 #license: CC0
 #coverage.place: Bexar County, Texas, USA
 #coverage.dates: 1900-1920
-#record_count: 2
+#notes: Sample file for GENRECORD 1.0 documentation
 ---
 record_id,gender,surname,given,birth_date,birth_place,father_surname,father_given,mother_surname,mother_given,source,notes
-1,M,Stricklin,Charles Walter,15 Jun 1910,San Antonio TX,Stricklin,Walter Davis,Jones,Mary Ellen,Bexar County Birth Register Vol 3 p 42,
-2,F,Garcia,Maria Elena,3 Mar 1912,San Antonio TX,Garcia,Jose,Reyes,Carmen,,
+1,M,Stricklin,Charles Walter,15 Jun 1910,"San Antonio, Bexar County, Texas",Stricklin,Walter Davis,Jones,Mary Ellen,Bexar County Birth Register Vol 3 p 42,
+2,F,Garcia,Maria Elena,3 Mar 1912,"San Antonio, Bexar County, Texas",Garcia,Jose,Reyes,Carmen,,
+3,M,,,1905,"Bexar County, Texas",,,,,,Record damaged — gender only legible field
